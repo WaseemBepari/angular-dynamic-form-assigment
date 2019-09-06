@@ -1,0 +1,21 @@
+<div class="container">
+	<h1>
+		Comment Form
+	</h1>
+	<form [formGroup]="myForm" (ngSubmit)="onSubmit(myForm)">
+		<div class="form-group " [ngSwitch]="true" *ngFor="let arrayItem of CommentArray; let i=index">
+			<label for="exampleFormControlFile1">{{arrayItem.title}}</label>
+    <input type="{{arrayItem.type}}" *ngSwitchCase="arrayItem.type == 'text' || arrayItem.type == 'date'"  formControlName="{{arrayItem.id}}" class="form-control " [ngClass]="{ 'is-invalid': ((myForm.get(arrayItem.id).dirty || myForm.get(arrayItem.id).touched) && myForm.get(arrayItem.id).invalid )}" >
+    <select formControlName="{{arrayItem.id}}" class="browser-default custom-select"  [ngClass]="{ 'is-invalid': ((myForm.get(arrayItem.id).dirty || myForm.get(arrayItem.id).touched) && myForm.get(arrayItem.id).invalid )}" *ngSwitchCase="arrayItem.type == 'select'" >
+    <option selected>Select Gender</option>
+    <option *ngFor="let opt of arrayItem.options; let i=index">{{opt}}</option>
+  </select>
+  <textarea *ngSwitchCase="arrayItem.type == 'textarea'"  class="form-control" [ngClass]="{ 'is-invalid': ((myForm.get(arrayItem.id).dirty || myForm.get(arrayItem.id).touched) && myForm.get(arrayItem.id).invalid )}" formControlName="{{arrayItem.id}}" ></textarea>
+  <div class="invalid-feedback" *ngIf="myForm.get(arrayItem.id).invalid && (myForm.get(arrayItem.id).dirty || myForm.get(arrayItem.id).touched)">
+      <span *ngIf="myForm.get(arrayItem.id).errors"> {{getErrorMessage(arrayItem.validationMessages,myForm.get(arrayItem.id).errors)}}</span>
+  </div> 
+  </div>
+  <button type="submit" class="btn btn-primary btn-block" [disabled]="myForm.invalid">Submit</button>
+  {{myForm.value | json}}
+</form>
+</div>
